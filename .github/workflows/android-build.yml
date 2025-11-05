@@ -40,30 +40,30 @@ jobs:
         mkdir -p android/app/src/main/jniLibs/arm64-v8a/
         cp target/aarch64-linux-android/release/libaudiovisualizer.so android/app/src/main/jniLibs/arm64-v8a/
 
-    - name: Debug Android Project Structure
+    - name: Debug Build Variants
       run: |
         cd android
-        echo "=== Current Directory ==="
-        pwd
-        ls -la
+        echo "=== Build Types ==="
+        ./gradlew :app:printBuildTypes
     
-        echo "=== Gradle Files ==="
-        find . -name "*.gradle" -type f
+        echo "=== Product Flavors ==="  
+        ./gradlew :app:printProductFlavors
     
-        echo "=== Settings.gradle content ==="
-        cat settings.gradle 2>/dev/null || cat settings.gradle.kts 2>/dev/null || echo "No settings file found"
-    
-        echo "=== Available projects ==="
-        ./gradlew projects --no-daemon
-            
+        echo "=== All Tasks ==="
+        ./gradlew :app:tasks | grep -i assemble | head -10
+           
     - name: Build Android APK
       run: |
         cd android
-        chmod +x gradlew
-        ./gradlew tasks --all | grep assemble || echo "No assemble tasks found"
-        ./gradlew projects
-        ./gradlew :app:assembleDebug
-            
+    
+        # List all variants
+        ./gradlew :app:tasks --all | grep -i variant
+    
+        # Try building the app module directly
+        ./gradlew :app:assemble
+        # OR
+        ./gradlew :app:assembleRelease
+           
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
