@@ -39,7 +39,23 @@ jobs:
         # Copy the built library
         mkdir -p android/app/src/main/jniLibs/arm64-v8a/
         cp target/aarch64-linux-android/release/libaudiovisualizer.so android/app/src/main/jniLibs/arm64-v8a/
-        
+
+    - name: Debug Android Project Structure
+      run: |
+        cd android
+        echo "=== Current Directory ==="
+        pwd
+        ls -la
+    
+        echo "=== Gradle Files ==="
+        find . -name "*.gradle" -type f
+    
+        echo "=== Settings.gradle content ==="
+        cat settings.gradle 2>/dev/null || cat settings.gradle.kts 2>/dev/null || echo "No settings file found"
+    
+        echo "=== Available projects ==="
+        ./gradlew projects --no-daemon
+            
     - name: Build Android APK
       run: |
         cd android
