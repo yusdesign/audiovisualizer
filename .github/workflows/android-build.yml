@@ -39,33 +39,24 @@ jobs:
         # Copy the built library
         mkdir -p android/app/src/main/jniLibs/arm64-v8a/
         cp target/aarch64-linux-android/release/libaudiovisualizer.so android/app/src/main/jniLibs/arm64-v8a/
-
-    - name: Debug Build Variants
-      run: |
-        cd android
-        echo "=== Build Types ==="
-        ./gradlew :app:printBuildTypes
-    
-        echo "=== Product Flavors ==="  
-        ./gradlew :app:printProductFlavors
-    
-        echo "=== All Tasks ==="
-        ./gradlew :app:tasks | grep -i assemble | head -10
-           
+        
     - name: Build Android APK
       run: |
         cd android
     
-        # List all variants
-        ./gradlew :app:tasks --all | grep -i variant
+        # Just try the basic build command
+        ./gradlew build
     
-        # Try building the app module directly
-        ./gradlew :app:assemble
-        # OR
-        ./gradlew :app:assembleRelease
-           
-    - name: Upload APK
+    - name: Find and Upload APK
+      run: |
+        cd android
+        find . -name "*.apk" -type f
+        # Upload whatever APK was built
+        cp app/build/outputs/apk/*/*.apk ./
+      shell: bash
+  
+    - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
         name: audiovisualizer-apk
-        path: android/app/build/outputs/apk/debug/app-debug.apk
+        path: android/*.apk
