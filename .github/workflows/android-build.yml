@@ -14,40 +14,40 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: Set up JDK 21
+    - name: Setup Java
       uses: actions/setup-java@v4
       with:
         java-version: '21'
         distribution: 'temurin'
-    
+        
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
-
-    - name: Setup Rust and Android target
+      
+    - name: Install Rust Android targets
       run: |
         rustup target add aarch64-linux-android
-    
-    - name: Build Rust Library
+        # Add other Android targets if needed
+        rustup target add armv7-linux-androideabi
+        rustup target add i686-linux-android
+        
+    - name: Build Rust library with cargo-ndk
       run: |
-        # Use the NDK that comes with Android SDK
-        export NDK_PATH="$ANDROID_SDK_ROOT/ndk/25.2.9519653"
-        export LINKER="$NDK_PATH/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android24-clang"
-    
-        echo "Using linker: $LINKER"
-        CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=$LINKER cargo build --release --target aarch64-linux-android
-    
+        # Install cargo-ndk for easier Android builds
+        cargo install cargo-ndk
+        cargo ndk -t arm64-v8a build --release
+        
+        # Copy the built library
         mkdir -p android/app/src/main/jniLibs/arm64-v8a/
         cp target/aarch64-linux-android/release/libaudiovisualizer.so android/app/src/main/jniLibs/arm64-v8a/
-       
+        
     - name: Build Android APK
       run: |
-        cd audiovisualizer/android
+        cd android
         chmod +x gradlew
         ./gradlew assembleDebug
-      
-    - name: Upload APK artifact
+        
+    - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: audiovisualizer-apk
-        path: audiovisualizer/android/app/build/outputs/apk/debug/app-debug.apk
-        retention-days: 30
+        path: android/app/build/outputs/apk/debug/app-debug.apk
