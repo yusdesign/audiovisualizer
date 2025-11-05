@@ -50,13 +50,17 @@ jobs:
     - name: Find and Upload APK
       run: |
         cd android
+        echo "=== Searching for APK files ==="
         find . -name "*.apk" -type f
-        # Upload whatever APK was built
-        cp app/build/outputs/apk/*/*.apk ./
-      shell: bash
-  
+    
+        # Copy any found APK to root for easy upload
+        find . -name "*.apk" -type f -exec cp {} . \;
+        ls -la *.apk || echo "No APK in root, but check app/build/outputs/"
+    
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
         name: audiovisualizer-apk
-        path: android/*.apk
+        path: |
+          android/*.apk
+          android/app/build/outputs/apk/**/*.apk
