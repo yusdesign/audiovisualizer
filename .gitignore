@@ -3,6 +3,7 @@
 Cargo.lock  # Remove this line if it's a library
 
 # Temporary files
+/tmp/
 *.tmp
 *.temp
 *~
@@ -16,3 +17,11 @@ Thumbs.db
 
 # Logs
 *.log
+
+**.gitignore:**
+```gitignore
+**/*.rs.bk
+*.so
+*.apk
+/build/
+/dist/
