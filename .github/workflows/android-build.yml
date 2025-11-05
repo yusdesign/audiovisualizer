@@ -22,7 +22,18 @@ jobs:
     
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
-      
+
+    - name: Setup Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        target: aarch64-linux-android
+        override: true
+
+    - name: Add Android Rust target
+      run: |
+        rustup target add aarch64-linux-android
+          
     - name: Build Rust Library
       run: |
         cargo build --release --target aarch64-linux-android
