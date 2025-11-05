@@ -26,18 +26,19 @@ jobs:
     - name: Setup Rust and Android target
       run: |
         rustup target add aarch64-linux-android
-        
-    - name: Install Android NDK
-      uses: nttld/setup-ndk@v1
-      with:
-        ndk-version: "25c"
-
+    
     - name: Build Rust Library
       run: |
-        cargo build --release --target aarch64-linux-android
+        # Use the NDK that comes with Android SDK
+        export NDK_PATH="$ANDROID_SDK_ROOT/ndk/25.2.9519653"
+        export LINKER="$NDK_PATH/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android24-clang"
+    
+        echo "Using linker: $LINKER"
+        CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=$LINKER cargo build --release --target aarch64-linux-android
+    
         mkdir -p android/app/src/main/jniLibs/arm64-v8a/
         cp target/aarch64-linux-android/release/libaudiovisualizer.so android/app/src/main/jniLibs/arm64-v8a/
-        
+       
     - name: Build Android APK
       run: |
         cd audiovisualizer/android
