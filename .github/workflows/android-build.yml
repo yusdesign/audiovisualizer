@@ -44,8 +44,10 @@ jobs:
       run: |
         cd android
         chmod +x gradlew
-        ./gradlew assembleDebug
-        
+        ./gradlew tasks --all | grep assemble || echo "No assemble tasks found"
+        ./gradlew projects
+        ./gradlew :app:assembleDebug
+            
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
