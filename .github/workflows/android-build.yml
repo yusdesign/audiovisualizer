@@ -64,8 +64,8 @@ jobs:
           <background android:drawable="@color/ic_launcher_background"/>
           <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
         </adaptive-icon>
-EOF
-
+        EOF
+        
         # Create foreground
         cat > res/mipmap-anydpi-v26/ic_launcher_foreground.xml << 'EOF'
         <?xml version="1.0" encoding="utf-8"?>
@@ -74,7 +74,7 @@ EOF
           <path android:fillColor="#3DDC84" android:pathData="M0,0h108v108h-108z"/>
           <path android:fillColor="#FFFFFF" android:pathData="M44,44h20v20h-20z"/>
         </vector>
-EOF
+        EOF
 
         # Create colors
         cat > res/values/colors.xml << 'EOF'
@@ -82,8 +82,8 @@ EOF
         <resources>
           <color name="ic_launcher_background">#2196F3</color>
         </resources>
-EOF
-
+        EOF
+        
         echo "=== Created icon resources ==="
         find res/mipmap* res/values -type f
             
