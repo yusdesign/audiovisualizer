@@ -44,6 +44,13 @@ jobs:
         echo "=== gradle.properties content ==="
         cat gradle.properties
 
+    - name: Fix AndroidManifest.xml
+      run: |
+        cd android/app/src/main
+        # Remove the package attribute from AndroidManifest.xml
+        sed -i 's/package="[^"]*"//' AndroidManifest.xml
+        echo "=== Updated AndroidManifest.xml ==="
+        cat AndroidManifest.xml | head -10
         
     - name: Build Rust library with cargo-ndk
       run: |
