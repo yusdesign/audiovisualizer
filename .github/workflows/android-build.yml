@@ -55,34 +55,38 @@ jobs:
     - name: Add Default Launcher Icons
       run: |
         cd android/app/src/main
-        mkdir -p res/mipmap-hdpi res/mipmap-mdpi res/mipmap-xhdpi res/mipmap-xxhdpi res/mipmap-xxxhdpi
-    
-        # Create a simple placeholder icon (you can replace later)
-        echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>" > res/mipmap-anydpi-v26/ic_launcher.xml
-        echo "<adaptive-icon xmlns:android=\"http://schemas.android.com/apk/res/android\">" >> res/mipmap-anydpi-v26/ic_launcher.xml
-        echo "    <background android:drawable=\"@color/ic_launcher_background\"/>" >> res/mipmap-anydpi-v26/ic_launcher.xml
-        echo "    <foreground android:drawable=\"@mipmap/ic_launcher_foreground\"/>" >> res/mipmap-anydpi-v26/ic_launcher.xml
-        echo "</adaptive-icon>" >> res/mipmap-anydpi-v26/ic_launcher.xml
-    
+        mkdir -p res/mipmap-hdpi res/mipmap-mdpi res/mipmap-xhdpi res/mipmap-xxhdpi res/mipmap-xxxhdpi res/mipmap-anydpi-v26 res/values
+        
+        # Create adaptive icon
+        cat > res/mipmap-anydpi-v26/ic_launcher.xml << 'EOF'
+        <?xml version="1.0" encoding="utf-8"?>
+        <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+          <background android:drawable="@color/ic_launcher_background"/>
+          <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
+        </adaptive-icon>
+EOF
+
         # Create foreground
-        echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>" > res/mipmap-anydpi-v26/ic_launcher_foreground.xml
-        echo "<vector xmlns:android=\"http://schemas.android.com/apk/res/android\"" >> res/mipmap-anydpi-v26/ic_launcher_foreground.xml
-        echo "    android:width=\"108dp\" android:height=\"108dp\" android:viewportWidth=\"108\" android:viewportHeight=\"108\">" >> res/mipmap-anydpi-v26/ic_launcher_foreground.xml
-        echo "    <path android:fillColor=\"#3DDC84\" android:pathData=\"M0,0h108v108h-108z\"/>" >> res/mipmap-anydpi-v26/ic_launcher_foreground.xml
-        echo "    <path android:fillColor=\"#FFFFFF\" android:pathData=\"M44,44h20v20h-20z\"/>" >> res/mipmap-anydpi-v26/ic_launcher_foreground.xml
-        echo "</vector>" >> res/mipmap-anydpi-v26/ic_launcher_foreground.xml
-    
-        # Create background color
-        mkdir -p res/values
-        echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>" > res/values/colors.xml
-        echo "<resources>" >> res/values/colors.xml
-        echo "    <color name=\"ic_launcher_background\">#FFFFFF</color>" >> res/values/colors.xml
-        echo "</resources>" >> res/values/colors.xml
-    
+        cat > res/mipmap-anydpi-v26/ic_launcher_foreground.xml << 'EOF'
+        <?xml version="1.0" encoding="utf-8"?>
+        <vector xmlns:android="http://schemas.android.com/apk/res/android"
+          android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+          <path android:fillColor="#3DDC84" android:pathData="M0,0h108v108h-108z"/>
+          <path android:fillColor="#FFFFFF" android:pathData="M44,44h20v20h-20z"/>
+        </vector>
+EOF
+
+        # Create colors
+        cat > res/values/colors.xml << 'EOF'
+        <?xml version="1.0" encoding="utf-8"?>
+        <resources>
+          <color name="ic_launcher_background">#2196F3</color>
+        </resources>
+EOF
+
         echo "=== Created icon resources ==="
         find res/mipmap* res/values -type f
-
-        
+            
     - name: Build Rust library with cargo-ndk
       run: |
         # Install cargo-ndk for easier Android builds
