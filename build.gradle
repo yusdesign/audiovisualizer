@@ -1,11 +1,7 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+// Gradle 9.2.0
 plugins {
     id 'com.android.application' version '8.2.0' apply false
-    id 'org.jetbrains.kotlin.android' version '1.9.20' apply false
 }
-
-// Remove the old buildscript and allprojects blocks - they're deprecated in new Gradle
-// Just keep the clean task:
 
 tasks.register('clean', Delete) {
     delete rootProject.buildDir
