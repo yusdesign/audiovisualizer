@@ -1,6 +1,5 @@
 plugins {
     id 'com.android.application'
-    // REMOVE Kotlin plugin since we're using Java
 }
 
 android {
@@ -28,14 +27,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     
-    // REMOVE THIS ENTIRE BLOCK - it's for Kotlin only!
-    // kotlinOptions {
-    //     jvmTarget = '1.8'
-    // }
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.12.0'  // You can keep this or remove if not using Kotlin
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
