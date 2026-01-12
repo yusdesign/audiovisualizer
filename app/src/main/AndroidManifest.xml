@@ -1,16 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.yusdesign.audiovisualizer">
 
+    <!-- REQUIRED PERMISSIONS for audio visualization -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    
+    <!-- Optional: Only needed if you want to load audio files from storage -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" 
+        android:maxSdkVersion="32" />
+    
+    <!-- For Android 10+ scoped storage compatibility -->
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    
     <application
-        android:label="Test">
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Audio Visualizer"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        
+        <!-- Main Activity -->
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            
+            <!-- INTENT FILTER for launcher -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            
         </activity>
+        
     </application>
-
 </manifest>
