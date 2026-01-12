@@ -1,41 +1,22 @@
-name: Android CI
+name: Android Build
 
-on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
       with:
-        java-version: '17'
-        distribution: 'temurin'
-    
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-    
-    - name: Clean project
-      run: ./gradlew clean
-    
-    - name: Build with Gradle
-      run: ./gradlew build
+        java-version: '11'
+        
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
       
-    - name: Run tests
-      run: ./gradlew test
-      
-    - name: Assemble debug APK
+    - name: Build APK
       run: ./gradlew assembleDebug
-      
-    - name: Upload APK
-      uses: actions/upload-artifact@v3
-      with:
-        name: app-debug-apk
-        path: app/build/outputs/apk/debug/app-debug.apk 
